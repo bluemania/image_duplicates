@@ -1,0 +1,67 @@
+{% extends "template.html" %}
+{% block content %}
+
+
+<!-- <form action="/action_page.php">
+  First name:<br>
+  <input type="text" name="firstname" value="Mickey">
+  <br>
+  Last name:<br>
+  <input type="text" name="lastname" value="Mouse">
+  <br><br>
+  <input type="submit" value="Submit">
+</form> -->
+
+
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h1>Nick's image deduplication</h1>
+      <a href="{{ url_for('home') }}" tabindex="-1"> Menu </a>&nbsp;
+
+      <a href="{{ url_for('start', ref=max_len if ref ==0 else ref - 1) }}" tabindex="-1"> Prev </a>&nbsp;
+      <a href="{{ url_for('start', ref=0 if ref == max_len else ref + 1) }}" tabindex="-1"> Next </a>&nbsp;
+
+      <br>&nbsp;
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xl-3">
+
+      <p> Master </p>
+      <form action="{{ url_for('start', ref=ref) }}" method="POST">
+
+      <img src= "{{ url_for('download_file', guid=guid) }}" width=200>
+
+    </div>
+    <div class="col-xl-9">
+      <div class="row">
+          {% for other, sim in others.items() %}
+            {% if (loop.index-1) % 3 == 0 %}
+            </div>
+            <div class="row">
+            {% endif %} 
+            <div class="col-xl-3 border">
+              <input type= "checkbox" name="{{ other }}", value="" id="{{ other }}" {% if other in seen %}checked{% endif %}/>
+
+              <label for="{{other}}">
+                <p> Option - {{ sim|round(4) }}</p>
+                <img src= "{{ url_for('download_file', guid=other) }}" width=200>
+              </label>
+            </div>
+          {% endfor %}
+                <input type="submit" value="MARK DUPLICATE" />
+
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='scripts.js') }}"></script>
+
+
+{% endblock %}
